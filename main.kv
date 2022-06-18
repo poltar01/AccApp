@@ -1,0 +1,41 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+#:set text_color get_color_from_hex("#4a4939")
+#:set focus_color get_color_from_hex("#e7e4c0")
+#:set ripple_color get_color_from_hex("#c5bdd2")
+#:set bg_color get_color_from_hex("#f7f4e7")
+#:set selected_color get_color_from_hex("#0c6c4d")
+
+#:include login.kv
+#:include araba.kv
+#:include tezgah.kv
+#:include maya.kv
+#:include yonetim.kv
+
+
+ScreenManager:
+    id: screen_manager
+    LoginScreen:
+
+
+
+    ArabaScreen:
+    ArabaIslemlerScreen:
+    ArabaDurumScreen:
+
+    ArabaEkmekScreen:
+    ArabaIadeScreen:
+    ArabaBayatScreen:
+    ArabaTahsilatScreen:
+
+
+
+    TezgahScreen:
+
+
+
+    MayaScreen:
+
+
+
+    YonetimScreen:

@@ -1,0 +1,495 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+#:set text_color get_color_from_hex("#4a4939")
+#:set focus_color get_color_from_hex("#e7e4c0")
+#:set ripple_color get_color_from_hex("#c5bdd2")
+#:set bg_color get_color_from_hex("#f7f4e7")
+#:set selected_color get_color_from_hex("#0c6c4d")
+
+<ArabaScreen>
+	name: "araba_screen"
+    MDTopAppBar:
+        id:araba_toolbar
+        title: "Araba"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['logout', lambda x: root.disconnect()]]     
+
+
+    MDScreen:
+        pos: '0dp','-65dp'
+        ScrollView:
+            MDGridLayout:
+                id: araba_customers_grid
+                cols: 1
+                spacing: '5dp'
+                adaptive_height: True
+                padding: ('10dp', '10dp', '10dp', '75dp')
+                
+
+<ArabaIslemlerScreen>
+    name: "araba_islemler_screen"
+
+    MDTopAppBar:
+        id:araba_islemler_screen_toolbar
+        title: "İşlemler"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.arabaIslemlerGeri()]]     
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_islemler_boxlayout
+            orientation:'vertical'
+            halign: "center"
+
+            MDLabel:
+                id: araba_islemler_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 1}
+
+            BoxLayout:
+                id:araba_islemler_datatable_boxlayout
+                orientation:'vertical'
+                bg_color: get_color_from_hex("#f7f4e7")
+
+            MDGridLayout:
+                size_hint: (1,.7)
+                cols: 2
+                spacing: '5dp'
+                padding: ('10dp', '10dp', '10dp', '75dp')
+
+                MDRaisedButton:
+                    id: araba_islemler_ekmek_button
+                    # icon: "baguette"
+                    text:"Ekmek"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaIslemlerIleri("araba_durum_screen")
+                         
+                MDRaisedButton:
+                    id: araba_islemler_iade_button
+                    # icon: "arrow-u-left-bottom"
+                    # icon: "car-arrow-left"
+                    text:"İade"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    on_release: root.arabaIslemlerIleri("araba_iade_screen")      
+
+                MDRaisedButton:
+                    id: araba_islemler_bayat_button
+                    # icon: "timelapse"
+                    # icon: "car-defrost-front"
+                    text:"Bayat"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    on_release: root.arabaIslemlerIleri("araba_bayat_screen")
+
+                MDRaisedButton:
+                    id: araba_islemler_tahsilat_button
+                    # icon: "account-cash"
+                    text:"Tahsilat"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    on_release: root.arabaIslemlerIleri("araba_tahsilat_screen")
+
+
+
+<ArabaDurumScreen>
+    name: "araba_durum_screen"
+
+    MDTopAppBar:
+        id:araba_durum_screen_toolbar
+        title: "Durum"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.arabaDurumGeri()]]     
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_durum_boxlayout
+            orientation:'vertical'
+            halign: "center"
+
+            MDLabel:
+                id: araba_durum_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 1}
+
+            BoxLayout:
+                id:araba_durum_datatable_boxlayout            
+                orientation:'vertical'
+                bg_color: get_color_from_hex("#f7f4e7")
+
+            MDGridLayout:
+                size_hint: (1,1)
+                cols: 2
+                spacing: '5dp'
+                padding: ('10dp', '10dp', '10dp', '75dp')
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "white-balance-sunny"
+                    text: "Sabah"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("sabah")
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "clock-time-eight"
+                    text: "08:00"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("08_00")
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "theme-light-dark"
+                    # icon: "weather-sunset"
+                    text: "Öğle"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("ogle")
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "weather-night"
+                    text: "Akşam"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("aksam")
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "page-last"
+                    text: "Son"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("son")
+
+                MDRaisedButton:
+                    id: araba_durum_ekmek_button
+                    # icon: "store"
+                    text: "F. Giden"
+                    size_hint: (1,1)
+                    adaptive_height: True
+                    md_bg_color: get_color_from_hex("#f7f4e7")
+                    text_color: get_color_from_hex("#4a4939")
+                    font_size: 20
+                    elevation: 5
+                    border_radius: 100
+                    border_radius: 20
+                    radius: [15]
+                    # type: 'small'
+                    on_release: root.arabaDurumIleri("f_giden")
+
+
+
+<ArabaEkmekScreen>
+    name: "araba_ekmek_screen"
+
+    MDTopAppBar:
+        id:araba_ekmek_screen_toolbar
+        title: "Ekmek"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.manager.get_screen("araba_islemler_screen").arabaIslemGeri()]]
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_ekmek_boxlayout
+            orientation:'vertical'
+            halign: "center"
+            padding: ('10dp', '10dp', '10dp', '75dp')
+
+            MDLabel:
+                id: araba_ekmek_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 0}
+
+            BoxLayout:
+                orientation:'vertical'
+                padding: ('115dp', '0dp', '115dp', '200dp')
+                background_color: bg_color
+                pos_hint: {"top": 1}
+                MDTextField:
+                    id: araba_ekmek_inputfield
+                    mode: "rectangle"
+                    hint_text: "Adet"
+                    align: "center"
+                    input_filter: 'int'
+                    input_type: "number"
+
+            MDFloatingActionButton:
+                id: araba_ekmek_button
+                # icon: "download"
+                icon: "check"
+                size_hint: (1,None)
+                adaptive_height: True
+                md_bg_color: get_color_from_hex("#f7f4e7")
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                elevation: 5
+                # pos_hint: {"bottom": 1}
+                on_release: root.arabaEkmek()
+
+<ArabaIadeScreen>
+    name: "araba_iade_screen"
+
+    MDTopAppBar:
+        id:araba_iade_screen_toolbar
+        title: "İade"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.manager.get_screen("araba_islemler_screen").arabaIslemGeri()]]
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_iade_boxlayout
+            orientation:'vertical'
+            halign: "center"
+            padding: ('10dp', '10dp', '10dp', '75dp')
+
+            MDLabel:
+                id: araba_iade_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 1}
+                
+            BoxLayout:
+                orientation:'vertical'
+                padding: ('115dp', '0dp', '115dp', '200dp')
+                background_color: bg_color
+                pos_hint: {"top": 1}
+                MDTextField:
+                    id: araba_iade_inputfield
+                    mode: "rectangle"
+                    hint_text: "Adet"
+                    align: "center"
+                    input_filter: 'int'
+                    input_type: "number"
+
+            MDFloatingActionButton:
+                id: araba_iade_button
+                # icon: "download"
+                icon: "check"
+                size_hint: (1,None)
+                adaptive_height: True
+                md_bg_color: get_color_from_hex("#f7f4e7")
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                elevation: 5
+                # pos_hint: {"bottom": 1}
+                on_release: root.arabaIade()
+
+<ArabaBayatScreen>
+    name: "araba_bayat_screen"
+
+    MDTopAppBar:
+        id:araba_bayat_screen_toolbar
+        title: "Bayat"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.manager.get_screen("araba_islemler_screen").arabaIslemGeri()]]
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_bayat_boxlayout
+            orientation:'vertical'
+            halign: "center"
+            padding: ('10dp', '10dp', '10dp', '75dp')
+
+            MDLabel:
+                id: araba_bayat_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 1}
+            
+            BoxLayout:
+                orientation:'vertical'
+                padding: ('115dp', '0dp', '115dp', '200dp')
+                background_color: bg_color
+                pos_hint: {"top": 1}
+                MDTextField:
+                    id: araba_bayat_inputfield
+                    mode: "rectangle"
+                    hint_text: "Adet"
+                    align: "center"
+                    input_filter: 'int'
+                    input_type: "number"
+
+            MDFloatingActionButton:
+                id: araba_bayat_button
+                # icon: "download"
+                icon: "check"
+                size_hint: (1,None)
+                adaptive_height: True
+                md_bg_color: get_color_from_hex("#f7f4e7")
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                elevation: 5
+                # pos_hint: {"bottom": 1}
+                on_release: root.arabaBayat()
+
+<ArabaTahsilatScreen>
+    name: "araba_tahsilat_screen"
+    MDTopAppBar:
+        id:araba_tahsilat_screen_toolbar
+        title: "Tahsilat"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['chevron-left', lambda x: root.manager.get_screen("araba_islemler_screen").arabaIslemGeri()]]
+
+    MDScreen:
+        pos: '0dp','-65dp'
+
+        BoxLayout:
+            id: araba_tahsilat_boxlayout
+            orientation:'vertical'
+            halign: "center"
+            padding: ('10dp', '10dp', '10dp', '75dp')
+
+            MDLabel:
+                id: araba_tahsilat_customer_label
+                text: "<Customer_Name>"
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                halign: "center"
+                size_hint: (1,.2)
+                pos_hint: {"top": 1}
+
+            BoxLayout:
+                orientation:'vertical'
+                padding: ('115dp', '0dp', '115dp', '200dp')
+                background_color: bg_color
+                pos_hint: {"top": 1}
+                MDTextField:
+                    id: araba_tahsilat_inputfield
+                    mode: "rectangle"
+                    hint_text: "Adet"
+                    align: "center"
+                    input_filter: 'float'
+                    input_type: "number"
+
+            MDFloatingActionButton:
+                id: araba_tahsilat_button
+                # icon: "download"
+                icon: "check"
+                size_hint: (1,None)
+                adaptive_height: True
+                md_bg_color: get_color_from_hex("#f7f4e7")
+                text_color: get_color_from_hex("#4a4939")
+                font_size: 20
+                elevation: 5
+                # pos_hint: {"bottom": 1}
+                on_release: root.arabaTahsilat()

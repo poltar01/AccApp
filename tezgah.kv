@@ -1,0 +1,18 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+#:set text_color get_color_from_hex("#4a4939")
+#:set focus_color get_color_from_hex("#e7e4c0")
+#:set ripple_color get_color_from_hex("#c5bdd2")
+#:set bg_color get_color_from_hex("#f7f4e7")
+#:set selected_color get_color_from_hex("#0c6c4d")
+
+<TezgahScreen>
+	name: "tezgah_screen"
+    MDTopAppBar:
+        title: "Tezgah"
+        elevation: 10
+        pos_hint: {"top": 1}
+        md_bg_color: focus_color
+        specific_text_color: text_color
+        # left_action_items:[['logout', lambda x: root.disconnect()]]
+        right_action_items:[['logout', lambda x: root.disconnect()]]

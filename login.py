@@ -5,11 +5,19 @@ from kivymd.uix.screen import MDScreen
 import pytz
 from datetime import datetime
 
+# con = mysql.connector.connect(
+#     user = "sql11500459",
+#     password = "hbKelUx9dX",
+#     host = "sql11.freemysqlhosting.net",
+#     database = "sql11500459",
+#     auth_plugin='mysql_native_password'
+# )
+
 con = mysql.connector.connect(
-    user = "sql11500459",
-    password = "hbKelUx9dX",
-    host = "sql11.freemysqlhosting.net",
-    database = "sql11500459",
+    user = "root",
+    password = "",
+    host = "localhost",
+    database = "accounting_db",
     auth_plugin='mysql_native_password'
 )
 
@@ -41,7 +49,7 @@ cursor.close()
 
 class LoginScreen(MDScreen):
 
-        
+       
     def doLogin(self,usernameInput,passwordInput):
         cursor = con.cursor()
         cursor.execute(f"SELECT permission FROM users WHERE username = '{usernameInput}' AND password ='{passwordInput}'")

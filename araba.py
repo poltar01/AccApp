@@ -10,17 +10,26 @@ from kivymd.uix.datatables import MDDataTable
 from kivymd.toast import toast
 import pytz
 
+# con = mysql.connector.connect(
+#     user = "sql11500459",
+#     password = "hbKelUx9dX",
+#     host = "sql11.freemysqlhosting.net",
+#     database = "sql11500459",
+#     auth_plugin='mysql_native_password'
+# )
+
 con = mysql.connector.connect(
-    user = "sql11500459",
-    password = "hbKelUx9dX",
-    host = "sql11.freemysqlhosting.net",
-    database = "sql11500459",
+    user = "root",
+    password = "",
+    host = "localhost",
+    database = "accounting_db",
     auth_plugin='mysql_native_password'
 )
+
 cursor = con.cursor()
 
 
-timeZ_Tr = pytz.timezone('Europe/Istanbul') 
+timeZ_Tr = pytz.timezone('Europe/Istanbul')
 current_total_table_name = f"araba_{datetime.now(timeZ_Tr).day}_{datetime.now(timeZ_Tr).month}_{datetime.now(timeZ_Tr).year}_total"
 current_logs_db_name = f"araba_{datetime.now(timeZ_Tr).day}_{datetime.now(timeZ_Tr).month}_{datetime.now(timeZ_Tr).year}_logs" # İLERDE LAZIM OLACAK
 
@@ -64,15 +73,15 @@ class ArabaScreen(MDScreen):
         self.ids.araba_customers_grid.clear_widgets()
         cursor = con.cursor()
         cursor.execute("SELECT name FROM araba_customers ORDER BY name")
-        
+       
         for customer in cursor.fetchall():
             self.ids.araba_customers_grid.add_widget(
                 MDRaisedButton(
                     text = f"{customer[0]}",
                     size_hint=(1,None),
-                    md_bg_color = get_color_from_hex("#f7f4e7"),
-                    text_color = get_color_from_hex("#4a4939"),
-                    font_size = 20,
+                    # md_bg_color = get_color_from_hex("#f7f4e7"),
+                    # text_color = get_color_from_hex("#4a4939"),
+                    font_size = "20dp",
                     elevation = 5,
                     on_release= self.arabaCustomerClick
                 )
@@ -103,11 +112,11 @@ class ArabaScreen(MDScreen):
         #         # ("Schedule", dp(30), lambda *args: print("Sorted using Schedule")),
         #     ],
         # )
-        
+       
         # self.manager.get_screen("araba_islemler_screen").ids.araba_islemler_datatable_boxlayout.add_widget(self.data_tables,1)
 
 
-    
+   
     def disconnect(self):
         self.manager.transition = SlideTransition(direction="right")
         self.manager.current = "login_screen"
@@ -124,32 +133,46 @@ class ArabaIslemlerScreen(MDScreen):
         cursor = con.cursor()
         cursor.execute(f"SELECT (sabah+08_00+ogle+aksam+son+f_giden),iade,bayat,tahsilat,devir FROM {current_total_table_name} WHERE customer = '{customerName}'")
         customer_data = cursor.fetchone()
-        self.data_tables = MDDataTable(
-            padding= (10,10,10,10),
-            # size_hint=(1, 0.5),
-            background_color = get_color_from_hex("#f7f4e7"),
-            # text_color = get_color_from_hex("#4a4939"),
-            # use_pagination=True,
-            # check=True,
-            # name column, width column, sorting function column(optional)
-            column_data=[
-                ("[color=#4a4939]Ekm.[/color]", dp(9)),
-                ("[color=#4a4939]İade[/color]", dp(9)),
-                ("[color=#4a4939]Bay.[/color]", dp(9)),
-                ("[color=#4a4939]Tah.[/color]", dp(9)),
-                ("[color=#4a4939]Devir[/color]", dp(11))
-                # ("Schedule", dp(30), lambda *args: print("Sorted using Schedule")),
-            ],
-            row_data=[
-                customer_data
-            ]
-        )
-        
-        self.ids.araba_islemler_datatable_boxlayout.add_widget(self.data_tables,1)
+        if customer_data != None:
+            self.data_tables = MDDataTable(
+                padding= (10,10,10,10),
+                # size_hint=(1, 0.5),
+                background_color = get_color_from_hex("#f7f4e7"),
+                # text_color = get_color_from_hex("#4a4939"),
+                # use_pagination=True,
+                # check=True,
+                # name column, width column, sorting function column(optional)
+                column_data=[
+                    ("Ekmek", dp(15)),
+                    ("İade", dp(15)),
+                    ("Bayat", dp(15)),
+                    ("Tahsilat", dp(15)),
+                    ("Devir", dp(15))
+                    # ("Schedule", dp(30), lambda *args: print("Sorted using Schedule")),
+                ],
+                row_data=[(
+                    customer_data[0],
+                    customer_data[1],
+                    customer_data[2],
+                    customer_data[3],
+                    customer_data[4]
+                    )
+                ]
+            )
+       
+            self.ids.araba_islemler_datatable_boxlayout.add_widget(self.data_tables,1)
 
-    def arabaIslemlerIleri(self,screenName):
+    def arabaIslemlerIleri(self,instance):
         self.manager.transition = SlideTransition(direction="left")
-        self.manager.current = screenName
+        if instance.text == "Ekmek":
+            self.manager.current = "araba_durum_screen"
+        elif instance.text == "İade":
+            self.manager.current = "araba_iade_screen"
+        elif instance.text == "Bayat":
+            self.manager.current = "araba_bayat_screen"
+        elif instance.text == "Tahsilat":
+            self.manager.current = "araba_tahsilat_screen"
+        
 
     def arabaIslemlerGeri(self):
         self.manager.transition = SlideTransition(direction="right")
@@ -159,46 +182,95 @@ class ArabaIslemlerScreen(MDScreen):
     def arabaIslemGeri(self):
         self.manager.transition = SlideTransition(direction="right")
         self.manager.current = "araba_islemler_screen"
-    
+
+    def on_pre_enter(self):
+        self.ids.araba_islemler_gridlayout.clear_widgets()
+        for button in ["Ekmek","İade","Bayat","Tahsilat"]:
+            self.ids.araba_islemler_gridlayout.add_widget(
+                MDRaisedButton(
+                    text=button,
+                    size_hint=(1,1),
+                    font_size= "25dp",
+                    on_release= self.arabaIslemlerIleri
+                )
+            )
+        
 
 class ArabaDurumScreen(MDScreen):
     def on_pre_enter(self):
         self.customerName = self.manager.get_screen("araba_islemler_screen").ids.araba_islemler_customer_label.text
         self.ids.araba_durum_customer_label.text = self.customerName
         self.ids.araba_durum_datatable_boxlayout.clear_widgets()
+        self.ids.araba_durum_gridlayout.clear_widgets()
         # Araba Durum Ekranı Tablosu İçin Müşteri Verisi Çekme Bölümü
         cursor = con.cursor()
+        print("###########################################>>>>>>",current_total_table_name,self.customerName)
         cursor.execute(f"SELECT sabah,08_00,ogle,aksam,son,f_giden FROM {current_total_table_name} WHERE customer = '{self.customerName}'")
         customer_data = cursor.fetchone()
-        
-        self.data_tables = MDDataTable(
-            padding= (10,10,10,10),
-            # size_hint=(1, 0.5),
-            background_color = get_color_from_hex("#f7f4e7"),
-            # text_color = get_color_from_hex("#4a4939"),
-            # use_pagination=True,
-            # check=True,
-            # name column, width column, sorting function column(optional)
-            column_data=[
-                ("[color=#4a4939]Sab.[/color]", dp(8)),
-                ("[color=#4a4939]8:00[/color]", dp(8)),
-                ("[color=#4a4939]Öğle[/color]", dp(8)),
-                ("[color=#4a4939]Akş.[/color]", dp(8)),
-                ("[color=#4a4939]Son[/color]", dp(8)),
-                ("[color=#4a4939]F.Gd[/color]", dp(8))
-                # ("Schedule", dp(30), lambda *args: print("Sorted using Schedule")),
-            ],
-            row_data=[
-                customer_data
-            ]
-        )   
-        self.ids.araba_durum_datatable_boxlayout.add_widget(self.data_tables)
-        
-    def arabaDurumIleri(self,durum):
-        self.durum = durum
+        if customer_data != None:
+            self.data_tables = MDDataTable(
+                padding= (10,10,10,10),
+                # size_hint=(1, 0.5),
+                # background_color = get_color_from_hex("#f7f4e7"),
+                # text_color = get_color_from_hex("#4a4939"),
+                # use_pagination=True,
+                # check=True,
+                # name column, width column, sorting function column(optional)
+                column_data=[
+                    ("Sabah", dp(12)),
+                    ("8:00", dp(12)),
+                    ("Öğle", dp(12)),
+                    ("Akşam", dp(12)),
+                    ("Son", dp(12)),
+                    ("F.Giden", dp(12))
+                    # ("Schedule", dp(30), lambda *args: print("Sorted using Schedule")),
+                ],
+                row_data=[(
+                    customer_data[0],
+                    customer_data[1],
+                    customer_data[2],
+                    customer_data[3],
+                    customer_data[4],
+                    customer_data[5]
+                    )
+                
+                ]
+            )  
+            self.ids.araba_durum_datatable_boxlayout.add_widget(self.data_tables)
+            
+            for button in ["Sabah","08:00","Öğle","Akşam","Son","F. Giden"]:
+                self.ids.araba_durum_gridlayout.add_widget(
+                    MDRaisedButton(
+                        text=button,
+                        size_hint=(1,1),
+                        font_size= "25dp",
+                        on_release= self.arabaDurumIleri
+                    )
+                )
+
+    def arabaDurumIleri(self,instance):
         self.manager.transition = SlideTransition(direction="left")
-        self.manager.current = "araba_ekmek_screen"
-    
+        if instance.text == "Sabah":
+            self.durum = "sabah"
+            self.manager.current = "araba_ekmek_screen"
+        elif instance.text == "08:00":
+            self.durum = "08_00"
+            self.manager.current = "araba_ekmek_screen"
+        elif instance.text == "Öğle":
+            self.durum = "ogle"
+            self.manager.current = "araba_ekmek_screen"
+        elif instance.text == "Akşam":
+            self.durum = "aksam"
+            self.manager.current = "araba_ekmek_screen"
+        elif instance.text == "Son":
+            self.durum = "son"
+            self.manager.current = "araba_ekmek_screen"
+        elif instance.text == "F. Giden":
+            self.durum = "f_giden"
+            self.manager.current = "araba_ekmek_screen"
+        
+        
+   
     def arabaDurumGeri(self):
         self.manager.transition = SlideTransition(direction="right")
         self.manager.current = "araba_islemler_screen"
@@ -209,7 +281,7 @@ class ArabaEkmekScreen(MDScreen):
         self.customerName = self.manager.get_screen("araba_islemler_screen").ids.araba_islemler_customer_label.text
         self.ids.araba_ekmek_customer_label.text = self.customerName
         self.durum = self.manager.get_screen("araba_durum_screen").durum
-        
+       
     def arabaEkmek(self):
         input_ekmek = int(self.ids.araba_ekmek_inputfield.text)
         self.ids.araba_ekmek_inputfield.text = ""
@@ -241,7 +313,7 @@ class ArabaEkmekScreen(MDScreen):
             self.manager.get_screen("araba_islemler_screen").ids.araba_islemler_datatable_boxlayout.clear_widgets()
             self.manager.get_screen("araba_islemler_screen").arabaIslemlerSetup(self.customerName)
             toast(f"Geçersiz Değer")
-        
+       
 
     def on_leave(self):
         print("***Araba Ekmek Çıkış Yapıldı")
@@ -292,7 +364,7 @@ class ArabaBayatScreen(MDScreen):
     def on_pre_enter(self):
         self.customerName = self.manager.get_screen("araba_islemler_screen").ids.araba_islemler_customer_label.text
         self.ids.araba_bayat_customer_label.text = self.customerName
-        
+       
 
     def arabaBayat(self):
         input_bayat = int(self.ids.araba_bayat_inputfield.text)

@@ -11,46 +11,47 @@
 
 <LoginScreen>
     name: "login_screen"
-    MDCard:
-        size_hint: None, None
-        size: 300, 550
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
-        shader: 10
-        padding: 65
-        spacing: 3
+    BoxLayout:
+        spacing: "10dp"
         orientation: 'vertical'
-        md_bg_color: bg_color
-        MDIcon:
-            icon: 'baguette'
-            halign: 'center'
-            font_size: 180
-            color: text_color
         MDTextField:
             id: username
             icon_left: "account-check"
             hint_text: "Kullanıcı Adı"
-            text_color: text_color
+            # text_color: text_color
             foreground_color: 1, 0, 1, 1
             size_hint_x: None
-            width: 220
-            font_size: 20
+            width: "300dp"
+            height: "100dp"
+            font_size: "25dp"
             pos_hint: {"center_x": 0.5}
+            multiline: False
         MDTextField:
             id: password
             icon_left: "key-variant"
             hint_text: "Parola"
-            text_color: text_color
+            # text_color: text_color
             foreground_color: 1, 0, 1, 1
             size_hint_x: None
-            width: 220
-            font_size: 20            
+            width: "300dp"
+            height: "100dp"
+            font_size: "25dp"            
             pos_hint: {"center_x": 0.5}
             password: True
+            multiline: False
         MDFillRoundFlatButton:
             text: "Giriş Yap"
-            font_size: 15
+            font_size: "25dp"
+            height: "35dp"
             elevation: 5
-            md_bg_color: focus_color
-            text_color: text_color
+            # md_bg_color: focus_color
+            # text_color: text_color
             pos_hint: {"center_x": 0.5}
+            size_hint: .8,None
             on_press: root.doLogin(username.text, password.text)
+           
+        MDIcon:
+            icon: 'baguette'
+            halign: "center"
+            font_size: "400dp"
+            # color: text_color

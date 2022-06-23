@@ -20,14 +20,15 @@ import mysql.connector
 
 
 # set window size
-Window.size=(300,500)        
+Window.size=(450,700)        
 class MyApp(MDApp):
     
     
     def build(self):
         # define theme colors
-        self.theme_cls.primary_palette = "Indigo"
-
+        self.theme_cls.primary_palette = "Gray"
+        self.theme_cls.primary_hue = "400"
+        self.theme_cls.theme_style = "Dark"
 
         # load and return kv string
         return Builder.load_file("main.kv") 
@@ -36,4 +37,5 @@ class MyApp(MDApp):
 
 
 # run app    
-MyApp().run()
+if __name__ == "__main__":
+    MyApp().run()
